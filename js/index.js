@@ -24,10 +24,40 @@ const uploader = (file) => {
   xhr.send(formData);
 };
 
+const progressUpload = (file) => {
+  const $progress = d.createElement("progress"),
+    $span = d.createElement("span");
+
+  $progress.value = 0;
+  $progress.max = 100;
+
+  $main.insertAdjacentElement("beforeend", $progress);
+  $main.insertAdjacentElement("beforeend", $span);
+
+  const fileReader = new FileReader();
+  fileReader.readAsDataURL(file);
+
+  fileReader.addEventListener("progress", (e) => {
+    let progress = parseInt((e.loaded * 100) / e.total);
+    $progress.value = progress;
+    $span.innerHTML = `<b>${file.name}-${(e.loaded / 1000000).toFixed(2)}/${(
+      e.total / 1000000
+    ).toFixed(2)}MB - ${progress}%</b>`;
+  });
+  fileReader.addEventListener("loadend", (e) => {
+    uploader(file);
+    setTimeout(() => {
+      $main.removeChild($progress);
+      $main.removeChild($span);
+      $files.value = "";
+    }, 3000);
+  });
+};
+
 d.addEventListener("change", (e) => {
   if (e.target === $files) {
     const files = Array.from(e.target.files);
 
-    files.forEach((el) => uploader(el));
+    files.forEach((el) => progressUpload(el));
   }
 });
