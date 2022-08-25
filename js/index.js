@@ -1,6 +1,6 @@
 const d = document,
   $main = d.querySelector("main"),
-  $files = d.getElementById("files");
+  $dropZone = d.querySelector(".drop-zone");
 
 const uploader = (file) => {
   const xhr = new XMLHttpRequest(),
@@ -49,15 +49,26 @@ const progressUpload = (file) => {
     setTimeout(() => {
       $main.removeChild($progress);
       $main.removeChild($span);
-      $files.value = "";
     }, 3000);
   });
 };
 
-d.addEventListener("change", (e) => {
-  if (e.target === $files) {
-    const files = Array.from(e.target.files);
+$dropZone.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  e.target.classList.add("is-active");
+});
+$dropZone.addEventListener("dragleave", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  e.target.classList.remove("is-active");
+});
+$dropZone.addEventListener("drop", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
 
-    files.forEach((el) => progressUpload(el));
-  }
+  const files = Array.from(e.dataTransfer.files);
+  files.forEach((el) => progressUpload(el));
+
+  e.target.classList.remove("is-active");
 });

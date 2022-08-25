@@ -10,7 +10,8 @@ html {
   box-sizing: inherit;
 }
 body {
-  background-color: beige;
+  margin: 0;
+  background-color: #adf;
   color: red;
 }
 h1 {
@@ -18,9 +19,41 @@ h1 {
 }
 main {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
   text-align: center;
   min-height: 100vh;
+}
+input {
+  display: block;
+}
+
+.drop-zone {
+  margin-left: auto;
+  margin-right: auto;
+  border: medium dashed #000;
+  width: 80%;
+  height: 40vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.drop-zone.is-active {
+  border: thick dashed #000;
+  background-color: #afa;
+  /*animation: pulse 1.5 infinite;*/
+  animation: pulse 0.5s linear infinite;
+  /*animation-timing-function: linear;*/
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
 }
